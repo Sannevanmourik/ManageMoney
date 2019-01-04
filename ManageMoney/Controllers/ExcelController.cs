@@ -14,13 +14,12 @@ namespace ManageMoney.Controllers
     [ApiController]
     public class ExcelController : ControllerBase
     {
-        [HttpGet]
-        [Route("Import")]
-        public string Import()
+        [HttpGet("{fileName}")]
+        public string Import([FromRoute] string fileName)
         {
-            string sWebRootFolder = @"D:\Users\smourik\Downloads";
-            string sFileName = @"XLS190104133739.xlsx";
-            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            string filePath = @"D:\Users\smourik\Downloads";
+            FileInfo file = new FileInfo(Path.Combine(filePath, fileName));
+
             try
             {
                 using (ExcelPackage package = new ExcelPackage(file))
