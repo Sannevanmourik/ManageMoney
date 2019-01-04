@@ -1,0 +1,30 @@
+<div class = "listOfBankAccounts">
+  <h3><b> BankAccounts Overview</b> </h3>
+  
+    <!-- <ul class="list-group">
+      <li class="list-group-item" 
+        *ngFor="let bankAccount of bankAccounts"> 
+        <b><em>{{bankAccount.bankAccountHolder}}</em></b>
+        <p>{{bankAccount.bankAccountType}}</p>
+        <p>{{bankAccount.bankAccountNumber}}</p>
+      </li>
+    </ul> -->
+    
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Bankaccount holder</th>
+      <th scope="col">Bankaccount type</th>
+      <th scope="col">Bankaccount number</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let bankAccount of bankAccounts">
+      <td>{{bankAccount.bankAccountHolder}}</td>
+      <td>{{bankAccount.bankAccountType | enumAsString:EBankAccountTypes}}</td>
+      <td>{{bankAccount.bankAccountNumber}}</td>
+    </tr>
+  </tbody>
+</table>
