@@ -11,6 +11,7 @@ import { BankaccountService } from './services/bankaccount.service';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { EnumAsStringPipe } from './pipes/enum-as-string.pipe';
+import { HomepageComponent } from './components/homepage/homepage.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { EnumAsStringPipe } from './pipes/enum-as-string.pipe';
     BankaccountOverviewComponent,
     HeaderComponent,
     FooterComponent,
-    EnumAsStringPipe
+    EnumAsStringPipe,
+    HomepageComponent
   ],
   imports: [
     BrowserModule,

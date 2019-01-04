@@ -11,27 +11,27 @@ import { EBankAccountTypes } from 'src/app/enums/EBankAccountTypes';
 })
 export class BankaccountOverviewComponent implements OnInit, OnDestroy {
 
-  subscription:  Subscription;
+  subscription: Subscription;
   bankAccounts: BankAccount[];
   EBankAccountTypes = EBankAccountTypes;
 
-  constructor (private service: BankaccountService) { }
+  constructor(private service: BankaccountService) { }
 
 
 
   ngOnInit() {
-    this.subscription = this.service.getAll().subscribe(
-      results => {
-        console.log('Retrieved films!', results);
-        this.bankAccounts = results;
-      },
-      (error) => {
-        console.error('Failed ', error);
-      })
+  this.subscription = this.service.getAll().subscribe(
+  results => {
+    console.log('Retrieved films!', results);
+    this.bankAccounts = results;
+  },
+  (error) => {
+    console.error('Failed ', error);
+  })
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
+ngOnDestroy() {
+  this.subscription.unsubscribe();
+}
 
 }
