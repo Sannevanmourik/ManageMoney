@@ -1,7 +1,7 @@
 export enum EBankAccountTypes {
     
     SavingsAccount,
-    PrivateBankAccount,
-    SharedBankAccount,
+    PrivateAccount,
+    SharedAccount,
     PiggyBank
 }

@@ -7,11 +7,18 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { BankaccountOverviewComponent } from './components/bankaccount-overview/bankaccount-overview.component';
+import { BankaccountService } from './services/bankaccount.service';
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { EnumAsStringPipe } from './pipes/enum-as-string.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BankaccountOverviewComponent
+    BankaccountOverviewComponent,
+    HeaderComponent,
+    FooterComponent,
+    EnumAsStringPipe
   ],
   imports: [
     BrowserModule,
@@ -20,7 +27,7 @@ import { BankaccountOverviewComponent } from './components/bankaccount-overview/
     AppRoutingModule,
     BrowserAnimationsModule,
   ],
-  providers: [],
+  providers: [BankaccountService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

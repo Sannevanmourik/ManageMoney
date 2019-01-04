@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ManageMoney.Models;
 
 namespace ManageMoney.Controllers
 {
-    public class BankAccountController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class BankAccountController : ControllerBase
     {
         private readonly ManageMoneyContext _context;
 
@@ -18,130 +20,101 @@ namespace ManageMoney.Controllers
             _context = context;
         }
 
-        // GET: BankAccount
-        public async Task<IActionResult> Index()
+        // GET: api/BankAccount
+        [HttpGet]
+        public IEnumerable<BankAccount> GetBankAccount()
         {
-            return View(await _context.BankAccount.ToListAsync());
+            return _context.BankAccount;
         }
 
-        // GET: BankAccount/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/BankAccount/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBankAccount([FromRoute] int id)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
-            }
-
-            var bankAccount = await _context.BankAccount
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (bankAccount == null)
-            {
-                return NotFound();
-            }
-
-            return View(bankAccount);
-        }
-
-        // GET: BankAccount/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: BankAccount/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[ValidateAntiForgeryToken]
-        [HttpPost]
-        public async Task<IActionResult> Create([Bind("Id,BankAccountHolder,BankAccountType,BankAccountNumber")] BankAccount bankAccount)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(bankAccount);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(bankAccount);
-        }
-
-        // GET: BankAccount/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
             var bankAccount = await _context.BankAccount.FindAsync(id);
+
             if (bankAccount == null)
             {
                 return NotFound();
             }
-            return View(bankAccount);
+
+            return Ok(bankAccount);
         }
 
-        // POST: BankAccount/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BankAccountHolder,BankAccountType,BankAccountNumber")] BankAccount bankAccount)
+        // PUT: api/BankAccount/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutBankAccount([FromRoute] int id, [FromBody] BankAccount bankAccount)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (id != bankAccount.Id)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(bankAccount).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(bankAccount);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BankAccountExists(bankAccount.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            return View(bankAccount);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!BankAccountExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: BankAccount/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // POST: api/BankAccount
+        [HttpPost]
+        public async Task<IActionResult> PostBankAccount([FromBody] BankAccount bankAccount)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
-            var bankAccount = await _context.BankAccount
-                .FirstOrDefaultAsync(m => m.Id == id);
+            _context.BankAccount.Add(bankAccount);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetBankAccount", new { id = bankAccount.Id }, bankAccount);
+        }
+
+        // DELETE: api/BankAccount/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBankAccount([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var bankAccount = await _context.BankAccount.FindAsync(id);
             if (bankAccount == null)
             {
                 return NotFound();
             }
 
-            return View(bankAccount);
-        }
-
-        // POST: BankAccount/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var bankAccount = await _context.BankAccount.FindAsync(id);
             _context.BankAccount.Remove(bankAccount);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return Ok(bankAccount);
         }
 
         private bool BankAccountExists(int id)

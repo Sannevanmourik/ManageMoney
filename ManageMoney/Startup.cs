@@ -33,6 +33,13 @@ namespace ManageMoney
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // Configure CORS so the API allows requests from JavaScript.
+            // All origins/headers/methods are allowed.
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOriginsHeadersAndMethods",
+                builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -56,7 +63,8 @@ namespace ManageMoney
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            // Enable CORS
+            app.UseCors("AllowAllOriginsHeadersAndMethods");
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
